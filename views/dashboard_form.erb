@@ -1,11 +1,25 @@
-<h1>PICK YOUR FEEDS!</h1>
-<form method="POST" action="/dashboard_form">
-<select name="feeds">
-  <option value="New_York_Times">New York Times</option>
-  <option value="ESPN">ESPN</option>
-  <option value="Twitter">Twitter</option>
-<input type="submit" value="submit">
-</select>
-</form>
+<section id="dahsboard_form">
+  <h1>PICK YOUR FEEDS!</h1>
+  <form method="POST" action="/dashboard_form">
+  <select name="feeds">
+    <option value="New_York_Times">New York Times</option>
+    <option value="ESPN">ESPN</option>
+    <option value="Twitter">Twitter</option>
+    <option value="Bleacher_Report">Bleacher Report</option>
+    <option value="RotoWire">RotoWire</option>
+    <option value="Weather">Weather</option>
+    <option value="The_football_guys">The Football Guys</option>
+  <input type="submit" value="submit">
+  </select>
+  </form>
+<br/>
+  <% if @show_submit_success_message %>
+    <p class="message">Great Job! Select more feeds, or click below to continue to your Dashboard!</p>
+  <% end %>
+<br/>
+
 
 <a href="/profile">Take me to my Dashboard!</a>
+
+
+</section>

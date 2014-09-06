@@ -21,6 +21,7 @@ class App < Sinatra::Base
     $redis = Redis.new({:host => uri.host,
                         :port => uri.port,
                         :password => uri.password})
+    $redis.flushdb
   end
 
   before do
@@ -54,6 +55,10 @@ class App < Sinatra::Base
   end
 
   get('/dashboard_form') do
+    if params[:sent] == "true"
+      @show_submit_success_message = true
+    end
+    # @feeds = get_from_redis(:feeds)
     render(:erb, :dashboard_form)
   end
 
@@ -73,12 +78,13 @@ class App < Sinatra::Base
 
   post('/dashboard_form') do
     new_feed = {
-      feeds: params["feeds"]
+      feeds: params[@key]
     }
 
-    post_to_redis("feeds")
+    post_to_redis(new_feed)
+  binding.pry
+    redirect to('/dashboard_form?sent=true')
 
-    redirect to('/dashboard_form')
   end
 
   ###################################
@@ -86,9 +92,17 @@ class App < Sinatra::Base
   ###################################
 
   def post_to_redis(feeds)
-    key = "source"
-    value = "feeds"
-    $redis.set("key", "value" )
+    number = $redis.keys("*feeds*").count
+    key = "feeds:#{number + 1}"
+    $redis.set(key, feeds.to_json)
+  end
+
+
+
+  def get_from_redis(redis_id)
+    model = JSON.parse($redis.get(redis_id))
+    model[:feeds] = redis_id
+    model
   end
 
 
