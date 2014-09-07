@@ -21,8 +21,9 @@ class App < Sinatra::Base
     $redis = Redis.new({:host => uri.host,
                         :port => uri.port,
                         :password => uri.password})
-    $redis.flushdb
-  end
+
+# $redis.flushdb
+end
 
   before do
     logger.info "Request Headers: #{headers}"
@@ -36,7 +37,7 @@ class App < Sinatra::Base
   ########################
   # API Keys
   #######################
-
+  # NYTimes
   KEY = "53bbd3a7cce7cbbcedc67e22259f12ee:4:69767384"
   CALLBACK_URI = "http://127.0.0.1/profile"
 
@@ -55,10 +56,13 @@ class App < Sinatra::Base
   end
 
   get('/dashboard_form') do
+    @feeds = []
+    $redis.keys("*feeds*").each do |key|
+      @feeds.push(get_from_redis(key))
+    end
     if params[:sent] == "true"
       @show_submit_success_message = true
     end
-    # @feeds = get_from_redis(:feeds)
     render(:erb, :dashboard_form)
   end
 
@@ -78,11 +82,11 @@ class App < Sinatra::Base
 
   post('/dashboard_form') do
     new_feed = {
-      feeds: params[@key]
+      :"feeds" => params["feeds"]
     }
 
     post_to_redis(new_feed)
-  binding.pry
+
     redirect to('/dashboard_form?sent=true')
 
   end
@@ -92,16 +96,15 @@ class App < Sinatra::Base
   ###################################
 
   def post_to_redis(feeds)
-    number = $redis.keys("*feeds*").count
-    key = "feeds:#{number + 1}"
+    key = "feeds"
     $redis.set(key, feeds.to_json)
   end
 
 
 
-  def get_from_redis(redis_id)
-    model = JSON.parse($redis.get(redis_id))
-    model[:feeds] = redis_id
+  def get_from_redis(feed)
+    model = JSON.parse($redis.get(feed))
+    model[:feeds] = feed
     model
   end
 
