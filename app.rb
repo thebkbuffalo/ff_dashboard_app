@@ -80,9 +80,6 @@ end
     render(:erb, :dashboard_form)
   end # ends get/dashboard_form
 
-  get('/new_user') do
-    render(:erb, :new_user)
-  end
 
   get('/profile') do
 ##########API's/RSS's####################
@@ -176,7 +173,7 @@ end
     redirect to("/profile?state=#{state}&city=#{city}")
   end
 
-  post('/new_user') do
+  post('/') do
     new_user = {
       name: params["name"],
       email: params["email"],
