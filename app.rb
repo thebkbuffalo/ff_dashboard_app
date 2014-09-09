@@ -27,7 +27,8 @@ class App < Sinatra::Base
     $redis = Redis.new({:host => uri.host,
                         :port => uri.port,
                         :password => uri.password})
-     $redis.flushdb
+    @@users = []
+     # $redis.flushdb
      data1 = "huff post"
      $redis.set("feed1", data1.to_json)
 end
@@ -73,24 +74,18 @@ end
 
   get('/dashboard_form') do
     @feeds = ["new_york_times", "twitter", "espn", "bleacher_report", "rotowire", "the_football_guys"]
-    # count = $redis.keys.size
-    # n=0
-    # while n < count+1
-    #   if $redis.get("feed#{n}") != nil
-    #   else
-    #     JSON.parse($redis.get("feed#{n}"))
-    #   n+=1
-    #   end
-    #   @feeds
-    # end
     if params[:sent] == "true"
       @show_submit_success_message = true
     end
     render(:erb, :dashboard_form)
   end # ends get/dashboard_form
 
+  get('/new_user') do
+    render(:erb, :new_user)
+  end
+
   get('/profile') do
-##########API's/RSS's#####################
+##########API's/RSS's####################
   ##################################
   #NYT_API
   ##############################
@@ -114,7 +109,7 @@ end
   # Twitter_api
   ##############################
      @tweets = []
-     TWITTER_CLIENT.search("fantasy football", :result_type => "recent").take(15).each do |tweet|
+     TWITTER_CLIENT.search("MatthewBerryTMR", :result_type => "recent").take(15).each do |tweet|
      @tweets.push(tweet.text)
    end
   #####################################
@@ -172,21 +167,28 @@ end
   # POST Routes
   ##################################
 
-  post('/profile') do
+  post('/dashboard_form') do
     number = $redis.keys.size
     number += 1
-    $redis.set("feed#{number}", params["feed_title"].to_json)
+    $redis.set("feed#{number}", params["feed"].to_json)
     city = params[:city]
     state = params[:state]
     redirect to("/profile?state=#{state}&city=#{city}")
   end
 
-##################################
-  def post_to_redis(feeds)
-    number = $redis.keys.size
-    number += 1
-    $redis.set("feeds#{number}", params["feed_title"].to_json)
+  post('/new_user') do
+    new_user = {
+      name: params["name"],
+      email: params["email"],
+      pic: params["pic"],
+    }
+    @@users.push(new_user)
+    $redis.set("user", new_user.to_json)
+
+    redirect to('/dashboard_form')
   end
+##################################
+
 
 
 
