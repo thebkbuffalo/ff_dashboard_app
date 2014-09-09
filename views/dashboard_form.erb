@@ -1,26 +1,55 @@
 <section id="dahsboard_form">
+  <h1>Where are you?</h1>
+  <form method="POST" action="/profile">
+    <label for="city">City: </label>
+    <input type="text" name="city" id="city">
+    <label for="state">State: </label>
+    <input type="text" name="state" id="state">
+
+  <br/>
+  <br/>
+
   <h1>PICK YOUR FEEDS!</h1>
-  <form method="POST" action="/dashboard_form">
-  <select name="feeds">
-    <option value="New_York_Times">New York Times</option>
-    <option value="ESPN">ESPN</option>
-    <option value="Twitter">Twitter</option>
-    <option value="Bleacher_Report">Bleacher Report</option>
-    <option value="RotoWire">RotoWire</option>
-    <option value="Weather">Weather</option>
-    <option value="The_football_guys">The Football Guys</option>
+  <br/>
+
+    <% @feeds.each do |feed| %>
+
+    <label for="<%= feed %>"> <%= feed %></label>
+    <input type="checkbox" name="<%= feed %>" id="<%= feed %>">
+    <br/>
+    <br/>
+    <% end %>
+
+    <!-- <label for="name">New York Times</label>
+    <input type="checkbox" name="new_york_times" id="New_York_Times">
+    <br/>
+    <br/>
+    <label for="name">ESPN</label>
+    <input type="checkbox" name="espn" id="espn">
+    <br/>
+    <br/>
+    <label for="name">Twitter</label>
+    <input type="checkbox" name="twitter" id="twitter">
+    <br/>
+    <br/>
+    <label for="name">Bleacher Report</label>
+    <input type="checkbox" name="bleacer_report" id="bleacer_report">
+    <br/>
+    <br/>
+    <label for="name">RotoWire</label>
+    <input type="checkbox" name="rotowire" id="rotowire">
+    <br/>
+    <br/>
+    <label for="name">The Football Guys</label>
+    <input type="checkbox" name="the_football_guys" id="the_football_guys" -->
   <input type="submit" value="submit">
   </select>
   </form>
 <br/>
   <% if @show_submit_success_message %>
-    <p class="message">Great Job! Select more feeds, or click below to continue to your Dashboard!</p>
+    <p class="message">Great Job!</p>
   <% end %>
 <br/>
-
-<%= @feeds %>
-<br/>
-
 <a href="/profile">Take me to my Dashboard!</a>
 
 

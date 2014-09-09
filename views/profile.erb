@@ -1,3 +1,59 @@
+<section id="profile">
+<div id="top">
 <h1>Welcome to your very own Fantasy Dashboard!</h1>
 <br/>
-<%= @feeds %>
+<h1>Weather!<h1>
+<h2>The temperate is <%= @temp_in_f %>!</h2>
+</div>
+<br/>
+<div id="nyt">
+<h1>New York Times</h1>
+<% @simple_nyt.each do |article| %>
+  <ol><%=  article["snippet"] %></ol>
+<% end %>
+</div>
+<br/>
+<br/>
+<div id="twitter">
+<h1>Get ya twitter on son!</h1>
+<% @tweets.each do |tweet| %>
+  <ul><%= tweet %></ul>
+<% end %>
+</div>
+<br/>
+<br/>
+<div id="espn">
+<h1>ESPN Feed</h1>
+<% @espn_feed.each do |espn| %>
+  <ol><%= espn[:title] %></ol>
+  <ol><%= espn[:summary] %></ol>
+<% end %>
+</div>
+<br/>
+<br/>
+<div id="bleacher_report">
+<h1>Bleacher Report RSS Feed</h1>
+<% @br_feed.each do |br| %>
+  <ol><%= br[:summary] %></ol>
+<% end %>
+</div>
+<br/>
+<br/>
+<div id="rotowire">
+<h1>RotoWire RSS Feed</h1>
+<% @roto_feed.each do |roto| %>
+  <ol><%= roto[:title] %></ol>
+  <ol><%= roto[:summary] %></ol>
+<% end %>
+</div>
+<br/>
+<br/>
+<div id="fbg">
+<h1>The Football Guys RSS Feed</h1>
+<% @fbg_feed.each do |fbg| %>
+  <ol><%= fbg[:title] %></ol>
+  <ol><%= fbg[:summary] %></ol>
+<% end %>
+</div>
+
+</section>

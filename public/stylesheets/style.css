@@ -1,0 +1,13 @@
+body {
+  background: url("../images/football.jpg") no-repeat center center fixed;
+  background-size: cover;
+}
+
+#top, #nyt, #twitter, #espn,
+#bleacher_report, #rotowire, #fbg {
+  background: rgba(176,176,176,.8765);
+  border-radius: 25px;
+  text-align: center;
+  margin: 0 23px 0 23px;
+  font-size: 20px;
+}
