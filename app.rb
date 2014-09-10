@@ -1,6 +1,6 @@
 require 'sinatra/base'
 require 'json'
-require 'pry'
+require 'pry' if ENV["RACK_ENV"] == "development"
 require 'httparty'
 require 'redis'
 require 'securerandom'
@@ -29,8 +29,6 @@ class App < Sinatra::Base
                         :password => uri.password})
     @@users = []
     #  $redis.flushdb
-    #  data1 = "huff post"
-    #  $redis.set("feed:1", data1.to_json)
 end
 
   before do
@@ -83,7 +81,7 @@ end
 
   get('/dashboard_update') do
     @feeds = ["new_york_times", "twitter", "espn", "bleacher_report", "rotowire", "the_football_guys"]
-
+    @user = current_user
     render(:erb, :dashboard_update)
   end
 
@@ -216,16 +214,15 @@ current_user
   end
 
   put('/dashboard_update') do
-    current_user["city"] = params["city"]
-    current_user["state"] = params["state"]
-    current_user["new_york_times"] = params["new_york_times"]
-    current_user["twitter"] = params["twitter"]
-    current_user["espn"] = params["espn"]
-    current_user["bleacher_report"] = params["bleacher_report"]
-    current_user["rotowire"] = params["rotowire"]
+    current_user["city"] =              params["city"]
+    current_user["state"] =             params["state"]
+    current_user["new_york_times"] =    params["new_york_times"]
+    current_user["twitter"] =           params["twitter"]
+    current_user["espn"] =              params["espn"]
+    current_user["bleacher_report"] =   params["bleacher_report"]
+    current_user["rotowire"] =          params["rotowire"]
     current_user["the_football_guys"] = params["the_football_games"]
     $redis.set("user:#{current_user["id"]}", current_user.to_json)
-    binding.pry
     redirect to("/profile")
   end
 #############################################################

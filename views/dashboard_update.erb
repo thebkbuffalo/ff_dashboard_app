@@ -3,9 +3,9 @@
   <form method="POST" action="/dashboard_update">
     <input type="hidden" name="_method" value="PUT" />
     <label for="city">City: </label>
-    <input type="text" name="city" id="city">
+    <input type="text" name="city" id="city" value="<%= current_user["city"] %>">
     <label for="state">State: </label>
-    <input type="text" name="state" id="state">
+    <input type="text" name="state" id="state" value="<%= current_user["state"] %>">
 
   <br/>
   <br/>
@@ -16,7 +16,10 @@
     <% @feeds.each do |feed| %>
 
     <label for="<%= feed %>"> <%= feed %></label>
-    <input type="checkbox" name="<%= feed %>" id="<%= feed %>">
+    <input type="checkbox" name="<%= feed %>" id="<%= feed %>"
+    <%= current_user[feed] ? "checked" : nil %> >
+
+
     <br/>
     <br/>
     <% end %>
