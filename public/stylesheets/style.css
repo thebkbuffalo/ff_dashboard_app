@@ -1,6 +1,7 @@
 body {
   background: url("../images/football.jpg") no-repeat center center fixed;
   background-size: cover;
+  font: font-family: 'Droid Serif', serif;
 }
 
 #top, #nyt, #twitter, #espn,
@@ -12,7 +13,7 @@ body {
   font-size: 20px;
 }
 
-#intro, #new_user {
+#new_user {
   background: rgba(176,176,176,.8765);
   border-radius: 25px;
   text-align: center;
@@ -27,4 +28,49 @@ body {
   text-align: center;
   margin: 35px 23px 0 23px;
   font-size: 20px;
+}
+
+#intro {
+  background: rgba(176,176,176,.8765);
+  border-radius: 25px;
+  text-align: center;
+  margin: 14% 23% 0 23%;
+  font-size: 20px;
+  padding: 20px 0 20px 0;
+  font-family: 'Droid Serif', serif;
+}
+
+#intro, h1 {
+  font-size: 33px;
+}
+
+#intro, h2 {
+  font-size: 28px;
+  color: black;
+}
+
+a:link, a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+a:hover, a:active {
+  text-decoration: underline;
+  color: #400000;
+}
+
+#log_in {
+  margin: 15% 20% 0 20%;
+  border-radius: 25px;
+}
+
+#sign_up input[type=submit] {
+  font-size: 18px;
+  border-radius: 5px;
+  margin-top: -15px;
+  margin-bottom: 2px;
+}
+
+#sign_up {
+  margin: 35px 18% 0 18%;
 }

@@ -4,12 +4,12 @@
 <h2><a href="/dashboard_update">Edit</a></h2>
 <h2><a href="/">Log Out</a></h2>
 <br/>
-<h1>Weather!<h1>
+<h1><a href="http://www.wunderground.com/" target="_blank">Weather!</a><h1>
 <h2>The temperate is <%= @temp_in_f %>!</h2>
 </div>
 <br/>
 <div id="nyt">
-<h1>New York Times</h1>
+<h1><a href="http://www.nytimes.com/pages/sports/football/" target="_blank">New York Times</a></h1>
 <% if current_user["new_york_times"] == "on" %>
 <% @simple_nyt.each do |article| %>
   <ol><%=  article["snippet"] %></ol>
@@ -19,7 +19,7 @@
 <br/>
 <br/>
 <div id="twitter">
-<h1>Get ya Matthew Berry twitter on son!</h1>
+<h1><a href="https://twitter.com/MatthewBerryTMR" target="_blank">Get ya Matthew Berry twitter on son!</a></h1>
 <% if current_user["twitter"] == "on" %>
 <% @tweets.each do |tweet| %>
   <ul><%= tweet %></ul>
@@ -29,7 +29,7 @@
 <br/>
 <br/>
 <div id="espn">
-<h1>ESPN Feed</h1>
+<h1><a href="http://espn.go.com/nfl/" target="_blank">ESPN Feed</a></h1>
 <% if current_user["espn"] == "on" %>
 <% @espn_feed.each do |espn| %>
   <ol><%= espn[:title] %></ol>
@@ -40,7 +40,7 @@
 <br/>
 <br/>
 <div id="bleacher_report">
-<h1>Bleacher Report RSS Feed</h1>
+<h1><a href="http://bleacherreport.com/nfl" target="_blank">Bleacher Report RSS Feed</a></h1>
 <% if current_user["bleacher_report"] == "on" %>
 <% @br_feed.each do |br| %>
   <ol><%= br[:summary] %></ol>
@@ -50,7 +50,7 @@
 <br/>
 <br/>
 <div id="rotowire">
-<h1>RotoWire RSS Feed</h1>
+<h1><a href="http://www.rotowire.com/football/" target="_blank">RotoWire RSS Feed</a></h1>
 <% if current_user["rotowire"] == "on" %>
 <% @roto_feed.each do |roto| %>
   <ol><%= roto[:title] %></ol>
@@ -61,7 +61,7 @@
 <br/>
 <br/>
 <div id="fbg">
-<h1>The Football Guys RSS Feed</h1>
+<h1><a href="http://www.footballguys.com/" target="_blank">The Football Guys RSS Feed</a></h1>
 <% if current_user["the_football_guys"] == "on" %>
 <% @fbg_feed.each do |fbg| %>
   <ol><%= fbg[:title] %></ol>
