@@ -28,9 +28,9 @@ class App < Sinatra::Base
                         :port => uri.port,
                         :password => uri.password})
     @@users = []
-     # $redis.flushdb
-     data1 = "huff post"
-     $redis.set("feed1", data1.to_json)
+    #  $redis.flushdb
+    #  data1 = "huff post"
+    #  $redis.set("feed:1", data1.to_json)
 end
 
   before do
@@ -71,21 +71,30 @@ end
     render(:erb, :index)
   end
 
+  get('/log_in') do
+    render(:erb, :log_in)
+  end
 
-  get('/dashboard_form') do
+  get('/sign_up') do
     @feeds = ["new_york_times", "twitter", "espn", "bleacher_report", "rotowire", "the_football_guys"]
-    if params[:sent] == "true"
-      @show_submit_success_message = true
-    end
-    render(:erb, :dashboard_form)
-  end # ends get/dashboard_form
+    render(:erb, :sign_up)
+  end
 
+
+  get('/dashboard_update') do
+    @feeds = ["new_york_times", "twitter", "espn", "bleacher_report", "rotowire", "the_football_guys"]
+
+    render(:erb, :dashboard_update)
+  end
 
   get('/profile') do
+current_user
+
 ##########API's/RSS's####################
   ##################################
   #NYT_API
   ##############################
+
       base_url = "http://api.nytimes.com/svc/search/v2/articlesearch.json"
       query = "football"
       begin_date = 20140904
@@ -94,24 +103,26 @@ end
       @parsed_nyt = JSON.parse(@nyt_url)
       @simple_nyt = @parsed_nyt["response"]["docs"]
 
+
     ###########################
     # weather_api
-    ###############################
-      state = params[:state]
-      city = params[:city]
-      @weather_url = HTTParty.get("http://api.wunderground.com/api/60e77c41f4f4c6f7/conditions/q/#{state}/#{city}.json")
+    ##########################
+      @weather_url = HTTParty.get("http://api.wunderground.com/api/60e77c41f4f4c6f7/conditions/q/#{current_user["state"]}/#{current_user["city"]}.json")
       @temp_in_f = @weather_url["current_observation"]["temp_f"]
 
   ###########################
   # Twitter_api
   ##############################
+
      @tweets = []
      TWITTER_CLIENT.search("MatthewBerryTMR", :result_type => "recent").take(15).each do |tweet|
      @tweets.push(tweet.text)
    end
+
   #####################################
   # ESPN RSS Feed
   ################################
+
     @espn_feed = []
     @espn = Feedjira::Feed.fetch_and_parse("http://sports.espn.go.com/espn/rss/nfl/news")
     @espn.entries.first(15).each do |entry|
@@ -120,9 +131,11 @@ end
                       summary: entry.summary,
                       })
     end
+
   ###########################
   # Bleacher Report Feed
   ###########################
+
     @br_feed = []
     @br = Feedjira::Feed.fetch_and_parse("http://bleacherreport.com/articles;feed?tag_id=16")
     @br.entries.first(2).each do |entry|
@@ -131,9 +144,11 @@ end
                       summary: entry.summary,
                       })
     end
+
   ######################################
   # Rotowire RSS Feed
   #############################
+
     @roto_feed = []
     @rotowire = Feedjira::Feed.fetch_and_parse("http://www.rotowire.com/rss/news.htm?sport=nfl")
     @rotowire.entries.first(10).each do |entry|
@@ -142,9 +157,11 @@ end
                       summary: entry.summary,
                       })
     end
+
     ################################
     # The Football Guys RSS Feed
     ################################
+
       @fbg_feed = []
       @fbg = Feedjira::Feed.fetch_and_parse("http://rss.footballguys.com/bloggerrss.xml")
       @fbg.entries.first(10).each do |entry|
@@ -164,28 +181,64 @@ end
   # POST Routes
   ##################################
 
-  post('/dashboard_form') do
+
+  post('/log_in') do
+    users = $redis.keys.map {|ud| $redis.get(ud)}
+    parsed_users = users.map {|pu| JSON.parse(pu)}
+    results = parsed_users.select do |p|
+      p["name"] == params["name"]
+      end
+    session["current_user"] = results[0]
+    redirect to("/profile")
+  end
+
+  post('/sign_up') do
     number = $redis.keys.size
     number += 1
-    $redis.set("feed#{number}", params["feed"].to_json)
-    city = params[:city]
-    state = params[:state]
-    redirect to("/profile?state=#{state}&city=#{city}")
-  end
-
-  post('/') do
     new_user = {
-      name: params["name"],
-      email: params["email"],
-      pic: params["pic"],
+      id:                number,
+      name:              params["name"],
+      email:             params["email"],
+      pic:               params["pic"],
+      city:              params["city"],
+      state:             params["state"],
+      new_york_times:    params["new_york_times"],
+      twitter:           params["twitter"],
+      espn:              params["espn"],
+      bleacher_report:   params["bleacher_report"],
+      rotowire:          params["rotowire"],
+      the_football_guys: params["the_football_guys"],
     }
+
     @@users.push(new_user)
-    $redis.set("user", new_user.to_json)
-
-    redirect to('/dashboard_form')
+    $redis.set("user:#{number}", new_user.to_json)
+    redirect to("/log_in")
   end
-##################################
 
+  put('/dashboard_update') do
+    current_user["city"] = params["city"]
+    current_user["state"] = params["state"]
+    current_user["new_york_times"] = params["new_york_times"]
+    current_user["twitter"] = params["twitter"]
+    current_user["espn"] = params["espn"]
+    current_user["bleacher_report"] = params["bleacher_report"]
+    current_user["rotowire"] = params["rotowire"]
+    current_user["the_football_guys"] = params["the_football_games"]
+    $redis.set("user:#{current_user["id"]}", current_user.to_json)
+    binding.pry
+    redirect to("/profile")
+  end
+#############################################################
+ #######################
+ # Methods
+ ##################
+ def redis_get(number)
+   JSON.parse($redis.get("user:#{number}"))
+ end
+
+ def current_user
+    session["current_user"]
+ end
 
 
 

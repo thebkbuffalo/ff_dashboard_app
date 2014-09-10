@@ -1,6 +1,7 @@
 <section id="form">
   <h1>Where are you?</h1>
-  <form method="POST" action="/dashboard_form">
+  <form method="POST" action="/dashboard_update">
+    <input type="hidden" name="_method" value="PUT" />
     <label for="city">City: </label>
     <input type="text" name="city" id="city">
     <label for="state">State: </label>
@@ -22,14 +23,6 @@
 
 
   <input type="submit" value="submit">
-  </select>
   </form>
-<br/>
-  <% if @show_submit_success_message %>
-    <p class="message">Great Job!</p>
-  <% end %>
-<br/>
-<a href="/profile">Take me to my Dashboard!</a>
-
 
 </section>

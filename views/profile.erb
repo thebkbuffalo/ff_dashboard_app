@@ -1,6 +1,8 @@
 <section id="profile">
 <div id="top">
 <h1>Welcome to your very own Fantasy Dashboard!</h1>
+<h2><a href="/dashboard_update">Edit</a></h2>
+<h2><a href="/">Log Out</a></h2>
 <br/>
 <h1>Weather!<h1>
 <h2>The temperate is <%= @temp_in_f %>!</h2>
@@ -8,51 +10,63 @@
 <br/>
 <div id="nyt">
 <h1>New York Times</h1>
+<% if current_user["new_york_times"] == "on" %>
 <% @simple_nyt.each do |article| %>
   <ol><%=  article["snippet"] %></ol>
+<% end %>
 <% end %>
 </div>
 <br/>
 <br/>
 <div id="twitter">
-<h1>Get ya twitter on son!</h1>
+<h1>Get ya Matthew Berry twitter on son!</h1>
+<% if current_user["twitter"] == "on" %>
 <% @tweets.each do |tweet| %>
   <ul><%= tweet %></ul>
+<% end %>
 <% end %>
 </div>
 <br/>
 <br/>
 <div id="espn">
 <h1>ESPN Feed</h1>
+<% if current_user["espn"] == "on" %>
 <% @espn_feed.each do |espn| %>
   <ol><%= espn[:title] %></ol>
   <ol><%= espn[:summary] %></ol>
+<% end %>
 <% end %>
 </div>
 <br/>
 <br/>
 <div id="bleacher_report">
 <h1>Bleacher Report RSS Feed</h1>
+<% if current_user["bleacher_report"] == "on" %>
 <% @br_feed.each do |br| %>
   <ol><%= br[:summary] %></ol>
+<% end %>
 <% end %>
 </div>
 <br/>
 <br/>
 <div id="rotowire">
 <h1>RotoWire RSS Feed</h1>
+<% if current_user["rotowire"] == "on" %>
 <% @roto_feed.each do |roto| %>
   <ol><%= roto[:title] %></ol>
   <ol><%= roto[:summary] %></ol>
+<% end %>
 <% end %>
 </div>
 <br/>
 <br/>
 <div id="fbg">
 <h1>The Football Guys RSS Feed</h1>
+<% if current_user["the_football_guys"] == "on" %>
 <% @fbg_feed.each do |fbg| %>
   <ol><%= fbg[:title] %></ol>
   <ol><%= fbg[:summary] %></ol>
+<% end %>
 <% end %>
 </div>
 
