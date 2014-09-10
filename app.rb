@@ -184,10 +184,13 @@ current_user
     users = $redis.keys.map {|ud| $redis.get(ud)}
     parsed_users = users.map {|pu| JSON.parse(pu)}
     results = parsed_users.select do |p|
-      p["name"] == params["name"]
+    if p["name"] == params["name"]
       end
     session["current_user"] = results[0]
     redirect to("/profile")
+   else
+     redirect to("/sign_up")
+   end
   end
 
   post('/sign_up') do
