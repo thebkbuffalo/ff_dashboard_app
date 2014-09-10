@@ -221,7 +221,7 @@ current_user
     current_user["espn"] =              params["espn"]
     current_user["bleacher_report"] =   params["bleacher_report"]
     current_user["rotowire"] =          params["rotowire"]
-    current_user["the_football_guys"] = params["the_football_games"]
+    current_user["the_football_guys"] = params["the_football_guys"]
     $redis.set("user:#{current_user["id"]}", current_user.to_json)
     redirect to("/profile")
   end
