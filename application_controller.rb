@@ -1,8 +1,12 @@
+require './helpers/application_helper'
+
 class ApplicationController < Sinatra::Base
 
   ########################
   # Configuration
   ########################
+
+  helpers ApplicationHelper
 
   configure do
     enable :logging

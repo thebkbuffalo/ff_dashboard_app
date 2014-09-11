@@ -192,16 +192,7 @@ current_user
     redirect to("/profile")
   end
 #############################################################
- #######################
- # Methods
- ##################
- def redis_get(number)
-   JSON.parse($redis.get("user:#{number}"))
- end
 
- def current_user
-    session["current_user"]
- end
 
 
 
