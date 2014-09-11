@@ -1,44 +1,8 @@
-require 'sinatra/base'
-require 'json'
-require 'pry' if ENV["RACK_ENV"] == "development"
-require 'httparty'
-require 'redis'
-require 'securerandom'
-require 'uri'
-require 'open-uri'
-require 'twitter'
-require 'rss'
-require 'feedjira'
+require './application_controller'
 
 
+class App < ApplicationController
 
-class App < Sinatra::Base
-
-  ########################
-  # Configuration
-  ########################
-
-  configure do
-    enable :logging
-    enable :method_override
-    enable :sessions
-    set :session_secret, 'super secret'
-    uri = URI.parse(ENV["REDISTOGO_URL"])
-    $redis = Redis.new({:host => uri.host,
-                        :port => uri.port,
-                        :password => uri.password})
-    @@users = []
-    #  $redis.flushdb
-end
-
-  before do
-    logger.info "Request Headers: #{headers}"
-    logger.warn "Params: #{params}"
-  end
-
-  after do
-    logger.info "Response Headers: #{response.headers}"
-  end
 
   ########################
   # API Keys
@@ -70,19 +34,19 @@ end
   end
 
   get('/log_in') do
-    render(:erb, :log_in)
+    render(:erb, :'sessions/show')
   end
 
   get('/sign_up') do
     @feeds = ["new_york_times", "twitter", "espn", "bleacher_report", "rotowire", "the_football_guys"]
-    render(:erb, :sign_up)
+    render(:erb, :'sessions/new')
   end
 
 
   get('/dashboard_update') do
     @feeds = ["new_york_times", "twitter", "espn", "bleacher_report", "rotowire", "the_football_guys"]
     @user = current_user
-    render(:erb, :dashboard_update)
+    render(:erb, :'dashboard/edit')
   end
 
   get('/profile') do
@@ -170,7 +134,7 @@ current_user
       end
 
 
-      render(:erb, :profile) # render for get/profile
+      render(:erb, :'dashboard/show') # render for get/profile
   end # ends get('/profile')
 
 
