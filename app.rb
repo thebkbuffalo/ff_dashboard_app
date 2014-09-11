@@ -216,13 +216,13 @@ current_user
   end
 
   put('/dashboard_update') do
-    current_user["city"] =              params["city"]
-    current_user["state"] =             params["state"]
-    current_user["new_york_times"] =    params["new_york_times"]
-    current_user["twitter"] =           params["twitter"]
-    current_user["espn"] =              params["espn"]
-    current_user["bleacher_report"] =   params["bleacher_report"]
-    current_user["rotowire"] =          params["rotowire"]
+    current_user["city"]              = params["city"]
+    current_user["state"]             = params["state"]
+    current_user["new_york_times"]    = params["new_york_times"]
+    current_user["twitter"]           = params["twitter"]
+    current_user["espn"]              = params["espn"]
+    current_user["bleacher_report"]   = params["bleacher_report"]
+    current_user["rotowire"]          = params["rotowire"]
     current_user["the_football_guys"] = params["the_football_guys"]
     $redis.set("user:#{current_user["id"]}", current_user.to_json)
     redirect to("/profile")
